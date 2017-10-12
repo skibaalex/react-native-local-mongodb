@@ -4,12 +4,12 @@
   "author": "Antonio Presto <antoniopresto@gmail.com>",
   "contributors": ["Antonio Presto"],
   "description":
-    "react-native local mongodb storage. Embedded persistent or in memory database for react-native. API is a subset of MongoDB's (NeDB) and it's plenty fast.",
+    "react-native local mongodb storage. Embedded persistent or in memory database for react-native. API is a subset of MongoDB's and it's plenty fast.",
   "keywords": ["database", "datastore", "embedded", "react-native", "mongodb"],
-  "homepage": "https://github.com/smartdemocracy/react-native-local-mongodb",
+  "homepage": "https://github.com/antoniopresto/react-native-local-mongodb",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/smartdemocracy/react-native-local-mongodb.git"
+    "url": "git+ssh://git@github.com/antoniopresto/react-native-local-mongodb.git"
   },
   "dependencies": {
     "async": "0.2.10",
@@ -30,7 +30,7 @@
   "main": "index",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/smartdemocracy/react-native-local-mongodb/issues"
+    "url": "https://github.com/antoniopresto/react-native-local-mongodb/issues"
   },
   "directories": {
     "test": "test"
