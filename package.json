@@ -2,17 +2,10 @@
   "name": "react-native-local-mongodb",
   "version": "1.8.2",
   "author": "Antonio Presto <antoniopresto@gmail.com>",
-  "contributors": [
-    "Antonio Presto"
-  ],
-  "description": "react-native local mongodb storage. Embedded persistent or in memory database for react-native. API is a subset of MongoDB's (NeDB) and it's plenty fast.",
-  "keywords": [
-    "database",
-    "datastore",
-    "embedded",
-    "react-native",
-    "mongodb"
-  ],
+  "contributors": ["Antonio Presto"],
+  "description":
+    "react-native local mongodb storage. Embedded persistent or in memory database for react-native. API is a subset of MongoDB's (NeDB) and it's plenty fast.",
+  "keywords": ["database", "datastore", "embedded", "react-native", "mongodb"],
   "homepage": "https://github.com/smartdemocracy/react-native-local-mongodb",
   "repository": {
     "type": "git",
