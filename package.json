@@ -1,11 +1,11 @@
 {
   "name": "react-native-local-mongodb",
-  "version": "1.8.2",
+  "version": "1.9.0",
   "author": "Antonio Presto <antoniopresto@gmail.com>",
   "contributors": [
     "Antonio Presto"
   ],
-  "description": "react-native local mongodb storage. Embedded persistent or in memory database for react-native. API is a subset of MongoDB's (NeDB) and it's plenty fast.",
+  "description": "react-native local mongodb storage. Embedded persistent or in memory database for react-native. API is a subset of MongoDB's and it's plenty fast.",
   "keywords": [
     "database",
     "datastore",
@@ -13,10 +13,10 @@
     "react-native",
     "mongodb"
   ],
-  "homepage": "https://github.com/smartdemocracy/react-native-local-mongodb",
+  "homepage": "https://github.com/antoniopresto/react-native-local-mongodb",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/smartdemocracy/react-native-local-mongodb.git"
+    "url": "git+ssh://git@github.com/antoniopresto/react-native-local-mongodb.git"
   },
   "dependencies": {
     "async": "0.2.10",
@@ -26,18 +26,25 @@
     "util": "0.10.3"
   },
   "devDependencies": {
+    "babel-preset-env": "^1.6.1",
     "chai": "^3.2.0",
+    "jest": "^22.2.2",
     "mocha": "1.4.x",
     "request": "2.9.x",
     "sinon": "1.3.x"
   },
   "scripts": {
-    "test": "mocha --reporter spec --timeout 10000"
+    "test": "NODE_ENV=test ./node_modules/.bin/jest --watch"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "react-native": "<rootDir>/config/jest/reactNativeMock.js"
+    }
   },
   "main": "index",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/smartdemocracy/react-native-local-mongodb/issues"
+    "url": "https://github.com/antoniopresto/react-native-local-mongodb/issues"
   },
   "directories": {
     "test": "test"

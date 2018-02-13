@@ -1,3 +1,4 @@
+
 **Embedded persistent or in memory database for react-native**. API is a subset of MongoDB's (NeDB) and it's <a href="#speed">plenty fast</a>.
 
 ## Installation, tests
@@ -84,10 +85,12 @@ Compaction will also immediately remove any documents whose data line has become
 
 Durability works similarly to major databases: compaction forces the OS to physically flush data to disk, while appends to the data file do not (the OS is responsible for flushing the data). That guarantees that a server crash can never cause complete data loss, while preserving performance. The worst that can happen is a crash between two syncs, causing a loss of all data between the two syncs. Usually syncs are 30 seconds appart so that's at most 30 seconds of data. <a href="http://oldblog.antirez.com/post/redis-persistence-demystified.html" target="_blank">This post by Antirez on Redis persistence</a> explains this in more details, react-native-local-mongodb being very close to Redis AOF persistence with `appendfsync` option set to `no`.
 
-
+#
+> Starting with version 1.9.0, the methods `insert`, `update`, `remove`, `find`,  and `findOne` also return a promise
+#
 ### Inserting documents
 The native types are `String`, `Number`, `Boolean`, `Date` and `null`. You can also use
-arrays and subdocuments (objects). If a field is `undefined`, it will not be saved (this is different from 
+arrays and subdocuments (objects). If a field is `undefined`, it will not be saved (this is different from
 MongoDB which transforms `undefined` in `null`, something I find counter-intuitive).
 
 If the document does not contain an `_id` field, react-native-local-mongodb will automatically generated one for you (a 16-characters alphanumerical string). The `_id` of a document, once set, cannot be modified.
@@ -200,7 +203,7 @@ db.findOne({ _id: 'id1' }, function (err, doc) {
 ```
 
 #### Operators ($lt, $lte, $gt, $gte, $in, $nin, $ne, $exists, $regex)
-The syntax is `{ field: { $op: value } }` where `$op` is any comparison operator:  
+The syntax is `{ field: { $op: value } }` where `$op` is any comparison operator:
 
 * `$lt`, `$lte`: less than, less than or equal
 * `$gt`, `$gte`: greater than, greater than or equal
@@ -237,17 +240,17 @@ db.find({ planet: { $regex: /ar/, $nin: ['Jupiter', 'Earth'] } }, function (err,
 ```
 
 #### Array fields
-When a field in a document is an array, react-native-local-mongodb first tries to see if the query value is an array to perform an exact match, then whether there is an array-specific comparison function (for now there is only `$size` and `$elemMatch`) being used. If not, the query is treated as a query on every element and there is a match if at least one element matches.  
+When a field in a document is an array, react-native-local-mongodb first tries to see if the query value is an array to perform an exact match, then whether there is an array-specific comparison function (for now there is only `$size` and `$elemMatch`) being used. If not, the query is treated as a query on every element and there is a match if at least one element matches.
 
 * `$size`: match on the size of the array
 * `$elemMatch`: matches if at least one array element matches the query entirely
 
 ```javascript
 // Exact match
-db.find({ satellites: ['Phobos', 'Deimos'] }, function (err, docs) {
+db.find({ satellites: ['Phobos', 'Deimos'] }, function (err, docs) {
   // docs contains Mars
 })
-db.find({ satellites: ['Deimos', 'Phobos'] }, function (err, docs) {
+db.find({ satellites: ['Deimos', 'Phobos'] }, function (err, docs) {
   // docs is empty
 })
 
