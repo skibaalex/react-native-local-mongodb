@@ -1,24 +1,106 @@
-import DataStore from '../index';
+import { getDb } from '../config/jest/helper'
 
-export const db = new DataStore();
+it('update with promise', async () => {
+  const db = await getDb()
+  const items0 = await db.find({})
 
-describe('persistence', () => {
-  it('should insert with promise', async () => {
-    await db.insert({ name: '0' });
-    await db.insert({ name: 'A' });
-    await db.insert({ name: 'B' });
-    await db.remove({ name: 'C' });
+  await db.insert({ name: 'Maggie' })
+  await db.insert({ name: 'Bob' })
 
-    const item = await db.find({});
-    expect(item.length).toEqual(3);
-  });
+  const items = await db.find({})
 
-  it('should insert with callback', async () => {
-    return new Promise((resolve) => {
-      db.insert({ name: 'Maggie' }, (err, res) => {
-        expect(res.name).toEqual('Maggie')
-        resolve()
-      });
-    })
-  });
-});
+  const maggie1 = await db.findOne({ name: 'Maggie' })
+  const bob1 = await db.findOne({ name: 'Bob' })
+
+  await db.update({ name: { $in: ['Maggie', 'Bob'] } }, { $set: { age: 1 } }, { multi: true })
+
+  const maggie2 = await db.findOne({ name: 'Maggie' })
+  const bob2 = await db.findOne({ name: 'Bob' })
+
+  expect(items0).toHaveLength(0)
+  expect(items).toHaveLength(2)
+  expect(maggie1.age).toBeUndefined()
+  expect(bob1.age).toBeUndefined()
+  expect(bob2.age).toEqual(1)
+  expect(maggie2.age).toEqual(1)
+})
+
+it('update with callback', async done => {
+  const db = await getDb()
+  const items0 = await db.find({})
+
+  await db.insert({ name: 'Maggie' })
+  await db.insert({ name: 'Bob' })
+
+  const items = await db.find({})
+
+  const maggie1 = await db.findOne({ name: 'Maggie' })
+  const bob1 = await db.findOne({ name: 'Bob' })
+
+  db.update({ name: { $in: ['Maggie', 'Bob'] } }, { $set: { age: 1 } }, { multi: true }, async function(err, res) {
+    const maggie2 = await db.findOne({ name: 'Maggie' })
+    const bob2 = await db.findOne({ name: 'Bob' })
+
+    expect(res).toEqual(2)
+    expect(items0).toHaveLength(0)
+    expect(items).toHaveLength(2)
+    expect(maggie1.age).toBeUndefined()
+    expect(bob1.age).toBeUndefined()
+    expect(bob2.age).toEqual(1)
+    expect(maggie2.age).toEqual(1)
+    done()
+  })
+})
+
+it('remove with callback', async done => {
+  const db = await getDb()
+  const items0 = await db.find({})
+
+  await db.insert({ name: 'Maggie' })
+  await db.insert({ name: 'Bob' })
+
+  const items = await db.find({})
+
+  db.remove({ name: { $in: ['Bob'] } }, { multi: true }, async function(err, res) {
+    const bob2 = await db.findOne({ name: 'Bob' })
+
+    expect(res).toEqual(1)
+    expect(items0).toHaveLength(0)
+    expect(items).toHaveLength(2)
+    expect(bob2).toBeNull()
+    done()
+  })
+})
+
+it('resolve remove nonexistent', async done => {
+  const db = await getDb()
+  const items0 = await db.find({})
+
+  await db.insert({ name: 'Maggie' })
+  await db.insert({ name: 'Bob' })
+
+  const items = await db.find({})
+
+  db.remove({ name: 'nonexistent' }, { multi: true }, async function(err, res) {
+    const nonexistent = await db.findOne({ name: 'nonexistent' })
+
+    expect(res).toEqual(0)
+    expect(items0).toHaveLength(0)
+    expect(items).toHaveLength(2)
+    expect(nonexistent).toBeNull()
+    done()
+  })
+})
+
+it('resolve findOne nonexistent', async () => {
+  const db = await getDb()
+  await db.insert({ name: 'Maggie' })
+  await db.insert({ name: 'Bob' })
+
+  const items = await db.find({ name: 'nonexistent' })
+
+  const item = await db.findOne({ name: 'nonexistent' }, function() {})
+
+  expect(item).toBeNull()
+  expect(items.length).toEqual(0)
+})
