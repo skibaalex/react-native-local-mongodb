@@ -1,37 +1,49 @@
-const items = {};
+let items = {};
 
 module.exports = {
   AsyncStorage: {
-    setItem: jest.fn((item, value) => {
+    __reset: () => items = {},
+
+    setItem: jest.fn((item, value, cb) => {
       return new Promise(resolve => {
         items[item] = value;
+        cb(null, value);
         resolve(value);
       });
     }),
-    multiSet: jest.fn((item, value) => {
+    multiSet: jest.fn((item, value, cb) => {
       return new Promise(resolve => {
         items[item] = value;
+        cb(null, value);
         resolve(value);
       });
     }),
-    getItem: jest.fn(item => {
+    getItem: jest.fn((item, cb) => {
       return new Promise(resolve => {
-        resolve(items[item]);
+        const res = items[item];
+        cb(null, res);
+        resolve(res);
       });
     }),
-    multiGet: jest.fn(item => {
+    multiGet: jest.fn((item, cb) => {
       return new Promise(resolve => {
-        resolve(items[item]);
+        const res = items[item];
+        cb(null, res);
+        resolve(res);
       });
     }),
-    removeItem: jest.fn(item => {
+    removeItem: jest.fn((item, cb) => {
       return new Promise(resolve => {
-        resolve(delete items[item]);
+        const res = delete items[item];
+        cb(null, res);
+        resolve(res);
       });
     }),
-    getAllKeys: jest.fn(items => {
+    getAllKeys: jest.fn((items, cb) => {
       return new Promise(resolve => {
-        resolve(items.keys());
+        const res = items.keys();
+        cb(null, res);
+        resolve(res);
       });
     })
   }
