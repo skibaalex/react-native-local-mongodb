@@ -93,7 +93,7 @@ The native types are `String`, `Number`, `Boolean`, `Date` and `null`. You can a
 arrays and subdocuments (objects). If a field is `undefined`, it will not be saved (this is different from
 MongoDB which transforms `undefined` in `null`, something I find counter-intuitive).
 
-If the document does not contain an `_id` field, react-native-local-mongodb will automatically generated one for you (a 16-characters alphanumerical string). The `_id` of a document, once set, cannot be modified.
+If the document does not contain an `_id` field, react-native-local-mongodb will automatically generate one for you (a 16-characters alphanumerical string). The `_id` of a document, once set, cannot be modified.
 
 Field names cannot begin by '$' or contain a '.'.
 
