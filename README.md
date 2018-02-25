@@ -1,8 +1,12 @@
 
-**Embedded persistent or in memory database for react-native**. API is a subset of MongoDB's (NeDB) and it's <a href="#speed">plenty fast</a>.
+**Embedded persistent or in memory database for react-native**. API is a subset of MongoDB's (NeDB).
 
 ## Installation, tests
 Module name on npm is `react-native-local-mongodb`.
+
+#
+> Starting with version 2.0.0, the `insert`,` update`, `remove`,` find`, and `findOne` methods no longer return promises - now they have a corresponding `Async` method (insertAsync, updateAsync, etc )
+#
 
 ```
 npm install react-native-local-mongodb --save    # Put latest version in your package.json
@@ -85,9 +89,6 @@ Compaction will also immediately remove any documents whose data line has become
 
 Durability works similarly to major databases: compaction forces the OS to physically flush data to disk, while appends to the data file do not (the OS is responsible for flushing the data). That guarantees that a server crash can never cause complete data loss, while preserving performance. The worst that can happen is a crash between two syncs, causing a loss of all data between the two syncs. Usually syncs are 30 seconds appart so that's at most 30 seconds of data. <a href="http://oldblog.antirez.com/post/redis-persistence-demystified.html" target="_blank">This post by Antirez on Redis persistence</a> explains this in more details, react-native-local-mongodb being very close to Redis AOF persistence with `appendfsync` option set to `no`.
 
-#
-> Starting with version 1.9.2, the methods `insert`, `update`, `remove`, `find`,  and `findOne` also return a promise
-#
 ### Inserting documents
 The native types are `String`, `Number`, `Boolean`, `Date` and `null`. You can also use
 arrays and subdocuments (objects). If a field is `undefined`, it will not be saved (this is different from

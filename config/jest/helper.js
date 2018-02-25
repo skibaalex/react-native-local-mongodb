@@ -4,6 +4,6 @@ import { AsyncStorage } from './reactNativeMock'
 export const getDb = async () => {
   AsyncStorage.__reset()
   const db = new DataStore({ filename: 'foo' })
-  await db.loadDatabase()
+  await db.loadDatabaseAsync()
   return db
 }
