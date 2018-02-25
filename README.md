@@ -86,7 +86,7 @@ Compaction will also immediately remove any documents whose data line has become
 Durability works similarly to major databases: compaction forces the OS to physically flush data to disk, while appends to the data file do not (the OS is responsible for flushing the data). That guarantees that a server crash can never cause complete data loss, while preserving performance. The worst that can happen is a crash between two syncs, causing a loss of all data between the two syncs. Usually syncs are 30 seconds appart so that's at most 30 seconds of data. <a href="http://oldblog.antirez.com/post/redis-persistence-demystified.html" target="_blank">This post by Antirez on Redis persistence</a> explains this in more details, react-native-local-mongodb being very close to Redis AOF persistence with `appendfsync` option set to `no`.
 
 #
-> Starting with version 1.9.0, the methods `insert`, `update`, `remove`, `find`,  and `findOne` also return a promise
+> Starting with version 1.9.2, the methods `insert`, `update`, `remove`, `find`,  and `findOne` also return a promise
 #
 ### Inserting documents
 The native types are `String`, `Number`, `Boolean`, `Date` and `null`. You can also use
@@ -616,22 +616,6 @@ db.ensureIndex({ fieldName: 'expirationDate', expireAfterSeconds: 0 }, function 
 ```
 
 **Note:** the `ensureIndex` function creates the index synchronously, so it's best to use it at application startup. It's quite fast so it doesn't increase startup time much (35 ms for a collection containing 10,000 documents).
-
-
-## Performance
-### Speed
-react-native-local-mongodb is not intended to be a replacement of large-scale databases such as MongoDB, and as such was not designed for speed. That said, it is still pretty fast on the expected datasets, especially if you use indexing. On a typical, not-so-fast dev machine, for a collection containing 10,000 documents, with indexing:  
-* Insert: **10,680 ops/s**
-* Find: **43,290 ops/s**
-* Update: **8,000 ops/s**
-* Remove: **11,750 ops/s**  
-
-You can run these simple benchmarks by executing the scripts in the `benchmarks` folder. Run them with the `--help` flag to see how they work.
-
-### Memory footprint
-A copy of the whole database is kept in memory. This is not much on the
-expected kind of datasets (20MB for 10,000 2KB documents).
-
 
 ## License 
 
