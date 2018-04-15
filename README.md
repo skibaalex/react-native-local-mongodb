@@ -296,7 +296,7 @@ db.find({ satellites: { $in: ['Moon', 'Deimos'] } }, function (err, docs) {
 ```
 
 #### Logical operators $or, $and, $not, $where
-You can combine queries using logical operators:  
+You can combine queries using logical operators:
 
 * For `$or` and `$and`, the syntax is `{ $op: [query1, query2, ...] }`.
 * For `$not`, the syntax is `{ $not: query }`
@@ -323,7 +323,7 @@ db.find({ $or: [{ planet: 'Earth' }, { planet: 'Mars' }], inhabited: true }, fun
 ```
 
 #### Sorting and paginating
-If you don't specify a callback to `find`, `findOne` or `count`, a `Cursor` object is returned. You can modify the cursor with `sort`, `skip` and `limit` and then execute it with `exec(callback)`.
+If you don't specify a callback to `find`, `findOne` or `count`, a `Cursor` object is returned. You can modify the cursor with `sort`, `skip` and `limit` and then execute it with `exec(callback) - a promise is returned`.
 
 ```javascript
 // Let's say the database contains these 4 documents
@@ -402,7 +402,7 @@ db.count({}, function (err, count) {
 
 
 ### Updating documents
-`db.update(query, update, options, callback)` will update all documents matching `query` according to the `update` rules:  
+`db.update(query, update, options, callback)` will update all documents matching `query` according to the `update` rules:
 * `query` is the same kind of finding query you use with `find` and `findOne`
 * `update` specifies how the documents should be modified. It is either a new document or a set of modifiers (you cannot use both together, it doesn't make sense!)
   * A new document will replace the matched docs
@@ -470,7 +470,7 @@ db.update({ planet: 'Pluton' }, { planet: 'Pluton', inhabited: false }, { upsert
 // If you upsert with a modifier, the upserted doc is the query modified by the modifier
 // This is simpler than it sounds :)
 db.update({ planet: 'Pluton' }, { $inc: { distance: 38 } }, { upsert: true }, function () {
-  // A new document { _id: 'id5', planet: 'Pluton', distance: 38 } has been added to the collection  
+  // A new document { _id: 'id5', planet: 'Pluton', distance: 38 } has been added to the collection
 });
 
 // If we insert a new document { _id: 'id6', fruits: ['apple', 'orange', 'pear'] } in the collection,
@@ -530,7 +530,7 @@ db.update({ _id: 'id1' }, { $min: { value: 8 } }, {}, function () {
 ```
 
 ### Removing documents
-`db.remove(query, options, callback)` will remove all documents matching `query` according to `options`  
+`db.remove(query, options, callback)` will remove all documents matching `query` according to `options`
 * `query` is the same as the ones used for finding and updating
 * `options` only one option for now: `multi` which allows the removal of multiple documents if set to true. Default is false
 * `callback` is optional, signature: err, numRemoved
@@ -562,7 +562,7 @@ db.remove({}, { multi: true }, function (err, numRemoved) {
 ### Indexing
 react-native-local-mongodb supports indexing. It gives a very nice speed boost and can be used to enforce a unique constraint on a field. You can index any field, including fields in nested documents using the dot notation. For now, indexes are only used to speed up basic queries and queries using `$in`, `$lt`, `$lte`, `$gt` and `$gte`. The indexed values cannot be of type array of object.
 
-To create an index, use `datastore.ensureIndex(options, cb)`, where callback is optional and get passed an error if any (usually a unique constraint that was violated). `ensureIndex` can be called when you want, even after some data was inserted, though it's best to call it at application startup. The options are:  
+To create an index, use `datastore.ensureIndex(options, cb)`, where callback is optional and get passed an error if any (usually a unique constraint that was violated). `ensureIndex` can be called when you want, even after some data was inserted, though it's best to call it at application startup. The options are:
 
 * **fieldName** (required): name of the field to index. Use the dot notation to index a field in a nested document.
 * **unique** (optional, defaults to `false`): enforce field uniqueness. Note that a unique index will raise an error if you try to index two documents for which the field is not defined.
@@ -618,6 +618,6 @@ db.ensureIndex({ fieldName: 'expirationDate', expireAfterSeconds: 0 }, function 
 
 **Note:** the `ensureIndex` function creates the index synchronously, so it's best to use it at application startup. It's quite fast so it doesn't increase startup time much (35 ms for a collection containing 10,000 documents).
 
-## License 
+## License
 
 See [License](LICENSE)

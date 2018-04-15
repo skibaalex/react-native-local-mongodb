@@ -119,3 +119,16 @@ it('should limit', async (done) => {
     done()
   });
 })
+
+it('should limit async', async (done) => {
+  const db = await getDb()
+  await db.insertAsync({ name: 'A' })
+  await db.insertAsync({ name: 'B' })
+  await db.insertAsync({ name: 'C' })
+  await db.insertAsync({ name: 'D' })
+
+  const docs = await db.find({}).sort({ name: 1 }).skip(1).limit(2).exec();
+  expect(docs.length).toEqual(2)
+  expect(docs[1].name).toEqual('C')
+  done()
+})
