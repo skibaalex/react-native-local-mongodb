@@ -8,6 +8,7 @@ var should = require("chai").should(),
   Persistence = require("../lib/persistence"),
   storage = require("../config/AsyncStorageMock"),
   reloadTimeUpperBound = 60; // In ms, an upper bound for the reload time used to check createdAt and updatedAt
+
 describe("Database", function() {
   var d;
 
