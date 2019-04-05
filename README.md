@@ -18,6 +18,7 @@ It is a subset of MongoDB's (NeDB) API (the most used operations).
 
 * <a href="#creatingloading-a-database">Creating/loading a database</a>
 * <a href="#persistence">Persistence</a>
+* <a href="#using-a-custom-storage">Using a custom storage </a>
 * <a href="#inserting-documents">Inserting documents</a>
 * <a href="#finding-documents">Finding documents</a>
   * <a href="#basic-querying">Basic Querying</a>
@@ -88,6 +89,47 @@ Keep in mind that compaction takes a bit of time (not too much: 130ms for 50k re
 Compaction will also immediately remove any documents whose data line has become corrupted, assuming that the total percentage of all corrupted documents in that database still falls below the specified `corruptAlertThreshold` option's value.
 
 Durability works similarly to major databases: compaction forces the OS to physically flush data to disk, while appends to the data file do not (the OS is responsible for flushing the data). That guarantees that a server crash can never cause complete data loss, while preserving performance. The worst that can happen is a crash between two syncs, causing a loss of all data between the two syncs. Usually syncs are 30 seconds appart so that's at most 30 seconds of data. <a href="http://oldblog.antirez.com/post/redis-persistence-demystified.html" target="_blank">This post by Antirez on Redis persistence</a> explains this in more details, react-native-local-mongodb being very close to Redis AOF persistence with `appendfsync` option set to `no`.
+
+### Using a custom Storage
+You can pass a custom storage in the Datastore configuration object. Your storage must be an object that matches [this interface](https://github.com/react-native-community/react-native-async-storage/blob/67ae214ad5caebc83bb21e659e898924cb27fe6e/types/index.d.ts#L19).
+
+```javascript
+import Datastore from 'react-native-local-mongodb';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const db = new Datastore({
+  filename: 'asyncStorageKey',
+  storage: AsyncStorage
+});
+
+// === or ===
+
+const items = {};
+
+const db2 = new Datastore({
+  filename: 'asyncStorageKey',
+  
+  // custom storage
+  storage: {
+    setItem: (key, value, cb) => {
+      items[key] = value;
+      cb(null, value);
+    },
+
+    getItem: (key, cb) => {
+      const res = items[key];
+      cb(null, res);
+    },
+
+    removeItem: (key, cb) => {
+      const res = delete items[key];
+      cb(null, res);
+    },
+    
+    // ...
+  },
+});
+```
 
 ### Inserting documents
 The native types are `String`, `Number`, `Boolean`, `Date` and `null`. You can also use
