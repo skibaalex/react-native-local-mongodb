@@ -1,4 +1,8 @@
 
+# Deprecated
+> When I started this project, there were no off-line storage options for react-native besides AsyncStorage. Today there are many better options, which receive PRs and have entire teams working on. For these reasons, this project is archived.
+
+
 **Embedded persistent or in memory database for react-native**. API is a subset of MongoDB's (NeDB).
 
 ## Installation, tests
